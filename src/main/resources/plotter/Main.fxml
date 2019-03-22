@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.embed.swing.SwingNode?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="plotter.MainController"
+            prefHeight="600.0" prefWidth="800.0">
+    <top>
+        <MenuBar>
+            <Menu text="File">
+                <MenuItem text="Add points" onAction="#addPoints"/>
+                <Menu text="Remove points" fx:id="menuRemove"/>
+                <MenuItem text="Reset points" onAction="#resetPoints"/>
+            </Menu>
+        </MenuBar>
+    </top>
+    <center>
+        <SwingNode fx:id="node"/>
+    </center>
+</BorderPane>
