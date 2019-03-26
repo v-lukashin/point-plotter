@@ -96,7 +96,14 @@ public class MapController {
         mapViewer.setZoom(8);
 
         WaypointPainter<GeoPos> painter = Utils.getPainter(points, color, type);
-        pointsMap.put(file.getName(), painter);
+        String name = file.getName() + " " + type;
+        if (pointsMap.containsKey(name)) {
+            int i = 0;
+            while (pointsMap.containsKey(name + " " + ++i)) {
+            }
+            name += " " + i;
+        }
+        pointsMap.put(name, painter);
         this.painter.addPainter(painter);
     }
 
