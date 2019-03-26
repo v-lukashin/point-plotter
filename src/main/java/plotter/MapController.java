@@ -89,13 +89,13 @@ public class MapController {
         return new GeoPos(avgLat, avgLon);
     }
 
-    public void addPoints(File file, Color color) {
+    public void addPoints(File file, Color color, PainterType type) {
         HashSet<GeoPos> points = (file.getName().endsWith(".csv")) ? Utils.loadCsv(file) : Utils.loadGeohash(file);
 
         mapViewer.setCenterPosition(computeGeoCenter(points));
         mapViewer.setZoom(8);
 
-        WaypointPainter<GeoPos> painter = Utils.getPainter(points, color);
+        WaypointPainter<GeoPos> painter = Utils.getPainter(points, color, type);
         pointsMap.put(file.getName(), painter);
         this.painter.addPainter(painter);
     }

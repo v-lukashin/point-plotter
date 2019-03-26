@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
+<?import plotter.PainterType?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="plotter.PointsAddController"
       fx:id="box"
       spacing="5"
-      prefHeight="100.0" prefWidth="150.0">
+      prefHeight="125.0" prefWidth="150.0">
+    <ChoiceBox fx:id="type" prefWidth="150.0" onAction="#changeType">
+        <value>
+            <PainterType fx:value="POINTS"/>
+        </value>
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <PainterType fx:value="POINTS"/>
+                <PainterType fx:value="HEATMAP"/>
+            </FXCollections>
+        </items>
+    </ChoiceBox>
     <ColorPicker fx:id="colorPicker" customColors="red,green,blue" styleClass="split-button" prefWidth="150.0">
         <value>
             <Color blue="1"/>

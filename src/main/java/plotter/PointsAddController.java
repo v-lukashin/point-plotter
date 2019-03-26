@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -19,6 +20,8 @@ public class PointsAddController implements Initializable {
     @FXML
     private VBox box;
     @FXML
+    private ChoiceBox<PainterType> type;
+    @FXML
     private ColorPicker colorPicker;
     @FXML
     private Button buttonSetFile;
@@ -29,6 +32,19 @@ public class PointsAddController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+    }
+
+    @FXML
+    private void changeType(ActionEvent event) {
+        PainterType item = type.getValue();
+        switch (item) {
+            case POINTS:
+                colorPicker.setDisable(false);
+                break;
+            case HEATMAP:
+                colorPicker.setDisable(true);
+                break;
+        }
     }
 
     @FXML
@@ -54,7 +70,9 @@ public class PointsAddController implements Initializable {
         javafx.scene.paint.Color color = colorPicker.getValue();
         File file = fileRef.get();
         if (file != null) {
-            Setup.mapController.addPoints(file, new Color((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue(), (float) color.getOpacity()));
+            Setup.mapController.addPoints(file,
+                    new Color((float) color.getRed(), (float) color.getGreen(), (float) color.getBlue(), (float) color.getOpacity()),
+                    type.getValue());
             ((Stage) box.getScene().getWindow()).close();
         }
     }
