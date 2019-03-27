@@ -36,7 +36,7 @@ class Setup {
             Properties properties = new Properties();
             properties.load(new FileInputStream("cache"));
             String path = properties.getProperty("lastdir", null);
-            lastDir.set(new File(path));
+            if (path != null) lastDir.set(new File(path));
         } catch (IOException ignored) {
         }
     }
