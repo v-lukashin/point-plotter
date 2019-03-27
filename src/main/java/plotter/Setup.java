@@ -1,8 +1,5 @@
 package plotter;
 
-import javafx.collections.ObservableMap;
-import org.jxmapviewer.viewer.WaypointPainter;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -13,7 +10,6 @@ import java.util.concurrent.atomic.AtomicReference;
 class Setup {
     static final MapController mapController = new MapController();
     static final AtomicReference<File> lastDir = new AtomicReference<>();
-//    static ObservableMap<String, WaypointPainter<GeoPos>> pointsMap;
 
     static {
         load();
@@ -36,7 +32,7 @@ class Setup {
             Properties properties = new Properties();
             properties.load(new FileInputStream("cache"));
             String path = properties.getProperty("lastdir", null);
-            lastDir.set(new File(path));
+            if (path != null) lastDir.set(new File(path));
         } catch (IOException ignored) {
         }
     }
