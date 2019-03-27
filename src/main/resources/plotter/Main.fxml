@@ -14,6 +14,13 @@
                 <Menu text="Remove points" fx:id="menuRemove"/>
                 <MenuItem text="Reset points" onAction="#resetPoints"/>
             </Menu>
+            <Menu text="Tools">
+                <Menu text="Print screen to..">
+                    <MenuItem text="clipboard" onAction="#printScreenToClipboard"/>
+                    <MenuItem text="file" onAction="#printScreenToFile"/>
+                </Menu>
+            </Menu>
+            <Menu text="Help" visible="false"/>
         </MenuBar>
     </top>
     <center>

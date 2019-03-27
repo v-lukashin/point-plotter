@@ -1,6 +1,7 @@
 package plotter;
 
 import javafx.collections.MapChangeListener;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,11 +10,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.DataFormat;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.jxmapviewer.viewer.WaypointPainter;
 
+import javax.imageio.ImageIO;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -60,5 +68,30 @@ public class MainController implements Initializable {
     @FXML
     public void resetPoints() {
         Setup.mapController.resetPoints();
+    }
+
+    @FXML
+    public void printScreenToClipboard() {
+        WritableImage snapshot = node.snapshot(null, null);
+        Clipboard.getSystemClipboard().setContent(Collections.singletonMap(DataFormat.IMAGE, snapshot));
+    }
+
+    @FXML
+    public void printScreenToFile() {
+        WritableImage snapshot = node.snapshot(null, null);
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(Setup.lastDir.get());
+        fileChooser.setInitialFileName("map-screen-" + System.currentTimeMillis());
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Image format", "*.png");
+        fileChooser.getExtensionFilters().add(filter);
+        File file = fileChooser.showSaveDialog(node.getScene().getWindow());
+        if (file != null) {
+            Setup.lastDir.set(file.getParentFile());
+            try {
+                ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", file);
+            } catch (IOException ignored) {
+            }
+        }
     }
 }
