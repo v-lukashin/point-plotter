@@ -1,7 +1,7 @@
 package plotter;
 
 public enum PainterType {
-    POINTS("Points"), HEATMAP("HeatMap");
+    POINTS("Points"), HEATMAP("HeatMap"), ROUTE("Route");
     private String name;
 
     PainterType(String name) {

@@ -9,22 +9,22 @@ import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.cache.FileBasedLocalCache;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
+import org.jxmapviewer.painter.AbstractPainter;
 import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.TileFactoryInfo;
-import org.jxmapviewer.viewer.WaypointPainter;
 
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapController {
     private JXMapViewer mapViewer;
     private CompoundPainter<JXMapViewer> painter;
     private StringProperty title;
-    private ObservableMap<String, WaypointPainter<GeoPos>> pointsMap;
+    private ObservableMap<String, AbstractPainter> pointsMap;
 
     public MapController() {
         mapViewer = new JXMapViewer();
@@ -58,7 +58,7 @@ public class MapController {
         return mapViewer;
     }
 
-    public ObservableMap<String, WaypointPainter<GeoPos>> getPointsMap() {
+    public ObservableMap<String, AbstractPainter> getPointsMap() {
         return pointsMap;
     }
 
@@ -76,7 +76,7 @@ public class MapController {
         }
     }
 
-    private GeoPos computeGeoCenter(final Set<GeoPos> positions) {
+    private GeoPos computeGeoCenter(final List<GeoPos> positions) {
         double sumLat = 0;
         double sumLon = 0;
 
@@ -90,12 +90,12 @@ public class MapController {
     }
 
     public void addPoints(File file, Color color, PainterType type) {
-        HashSet<GeoPos> points = (file.getName().endsWith(".csv")) ? Utils.loadCsv(file) : Utils.loadGeohash(file);
+        List<GeoPos> points = (file.getName().endsWith(".csv")) ? Utils.loadCsv(file) : Utils.loadGeohash(file);
 
         mapViewer.setCenterPosition(computeGeoCenter(points));
         mapViewer.setZoom(8);
 
-        WaypointPainter<GeoPos> painter = Utils.getPainter(points, color, type);
+        AbstractPainter painter = Utils.getPainter(points, color, type);
         String name = file.getName() + " " + type;
         if (pointsMap.containsKey(name)) {
             int i = 0;

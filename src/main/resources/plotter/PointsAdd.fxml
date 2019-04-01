@@ -21,6 +21,7 @@
             <FXCollections fx:factory="observableArrayList">
                 <PainterType fx:value="POINTS"/>
                 <PainterType fx:value="HEATMAP"/>
+                <PainterType fx:value="ROUTE"/>
             </FXCollections>
         </items>
     </ChoiceBox>

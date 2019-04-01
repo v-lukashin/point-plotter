@@ -38,12 +38,11 @@ public class PointsAddController implements Initializable {
     private void changeType(ActionEvent event) {
         PainterType item = type.getValue();
         switch (item) {
-            case POINTS:
-                colorPicker.setDisable(false);
-                break;
             case HEATMAP:
                 colorPicker.setDisable(true);
                 break;
+            default:
+                colorPicker.setDisable(false);
         }
     }
 

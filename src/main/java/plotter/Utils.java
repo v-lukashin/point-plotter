@@ -7,22 +7,22 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
-import org.jxmapviewer.viewer.WaypointPainter;
+import org.jxmapviewer.painter.AbstractPainter;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 
 public class Utils {
     private static final CSVParser CSV_PARSER = new CSVParser();
     private static final Color[] colors = getGradient(new Color[]{Color.LIMEGREEN, Color.YELLOW, Color.ORANGE, Color.RED}, 5);
+    private static final Color invisible = Color.gray(0, 0);
 
-    static HashSet<GeoPos> loadCsv(File file) {
-        HashSet<GeoPos> positions = new HashSet<>();
+    static List<GeoPos> loadCsv(File file) {
+        List<GeoPos> positions = new ArrayList<>();
         try {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
@@ -34,8 +34,8 @@ public class Utils {
         return positions;
     }
 
-    static HashSet<GeoPos> loadGeohash(File file) {
-        HashSet<GeoPos> positions = new HashSet<>();
+    static List<GeoPos> loadGeohash(File file) {
+        List<GeoPos> positions = new ArrayList<>();
         try {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
@@ -48,14 +48,21 @@ public class Utils {
         return positions;
     }
 
-    static WaypointPainter<GeoPos> getPainter(Set<GeoPos> points, java.awt.Color color, PainterType type) {
-        WaypointPainter<GeoPos> painter;
-        if (type == PainterType.POINTS) {
-            painter = new WaypointPainter<>();
-            painter.setRenderer(new Renderer(color));
-        } else painter = new HeatMapPainter();
+    static AbstractPainter getPainter(List<GeoPos> points, java.awt.Color color, PainterType type) {
+        AbstractPainter painter;
 
-        painter.setWaypoints(points);
+        switch (type) {
+            case POINTS:
+                painter = new PointsPainter(points, color);
+                break;
+            case HEATMAP:
+                painter = new HeatMapPainter(points);
+                break;
+            case ROUTE:
+            default:
+                painter = new RoutePainter(points, color);
+        }
+
         return painter;
     }
 
@@ -80,12 +87,7 @@ public class Utils {
         for (int i = 0; i < lengthX; i++)
             for (int j = 0; j < lengthY; j++) {
                 float intensity = data[i][j] / max;
-                javafx.scene.paint.Color color;
-
-                if (intensity == 0) color = Color.gray(0, 0);
-                else color = colors[Math.round(intensity * (colors.length - 1))];
-
-                writer.setColor(i, j, color);
+                writer.setColor(i, j, intensity == 0 ? invisible : colors[Math.round(intensity * (colors.length - 1))]);
             }
     }
 
@@ -100,7 +102,7 @@ public class Utils {
     }
 
     static Color[] getGradient(Color[] base, int intervalStep) {
-        ArrayList<Color> tmp = new ArrayList<>();
+        List<Color> tmp = new ArrayList<>();
         for (int i = 0; i < base.length - 1; i++) {
             Color start = base[i];
             Color end = base[i + 1];

@@ -15,7 +15,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.jxmapviewer.viewer.WaypointPainter;
+import org.jxmapviewer.painter.AbstractPainter;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -34,7 +34,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         node.setContent(Setup.mapController.getMapViewer());
-        Setup.mapController.getPointsMap().addListener((MapChangeListener<String, WaypointPainter<GeoPos>>) change -> {
+        Setup.mapController.getPointsMap().addListener((MapChangeListener<String, AbstractPainter>) change -> {
             if (change.wasAdded()) {
                 MenuItem item = new MenuItem(change.getKey());
                 item.setOnAction(this::removePoints);

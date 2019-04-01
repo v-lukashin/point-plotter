@@ -1,25 +1,32 @@
 package plotter;
 
 import org.jxmapviewer.JXMapViewer;
-import org.jxmapviewer.viewer.WaypointPainter;
+import org.jxmapviewer.painter.AbstractPainter;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
-public class HeatMapPainter extends WaypointPainter<GeoPos> {
+public class HeatMapPainter extends AbstractPainter<JXMapViewer> {
+    private List<GeoPos> points;
+
+    public HeatMapPainter(List<GeoPos> points) {
+        this.points = points;
+    }
+
     @Override
     protected void doPaint(Graphics2D g, JXMapViewer map, int width, int height) {
-        Rectangle viewportBounds = map.getViewportBounds();
+        Rectangle rect = map.getViewportBounds();
 
-        double down = viewportBounds.x;
-        double left = viewportBounds.y;
-        double up = viewportBounds.x + viewportBounds.width;
-        double right = viewportBounds.y + viewportBounds.height;
+        double down = rect.x;
+        double left = rect.y;
+        double up = rect.x + rect.width;
+        double right = rect.y + rect.height;
 
         float[][] heatMask = new float[width][height];
 
-        for (GeoPos w : getWaypoints()) {
+        for (GeoPos w : points) {
             Point2D point = map.getTileFactory().geoToPixel(w, map.getZoom());
 
             double lat = point.getX();
