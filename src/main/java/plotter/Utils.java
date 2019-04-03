@@ -20,6 +20,8 @@ public class Utils {
     private static final CSVParser CSV_PARSER = new CSVParser();
     private static final Color[] colors = getGradient(new Color[]{Color.LIMEGREEN, Color.YELLOW, Color.ORANGE, Color.RED}, 5);
     private static final Color invisible = Color.gray(0, 0);
+    private static final int radius = 20;
+    private static final double r = radius * radius;
 
     static List<GeoPos> loadCsv(File file) {
         List<GeoPos> positions = new ArrayList<>();
@@ -27,7 +29,8 @@ public class Utils {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String[] line = CSV_PARSER.parseLine(scanner.nextLine());
-                positions.add(new GeoPos(Double.parseDouble(line[0]), Double.parseDouble(line[1])));
+                if (line.length > 1)
+                    positions.add(new GeoPos(Double.parseDouble(line[0]), Double.parseDouble(line[1])));
             }
         } catch (IOException e) {
         }
@@ -66,12 +69,19 @@ public class Utils {
         return painter;
     }
 
-    static void fillData(float[][] data, int x, int y, int radius) {
-        for (int i = x - radius; i <= x + radius && i >= 0 && i < data.length; i++) {
-            for (int j = y - radius; j <= y + radius && j >= 0 && j < data[i].length; j++) {
-                double intensity = Math.sqrt((x - i) * (x - i) + (y - j) * (y - j)) / radius;
-                intensity = intensity >= 1 ? 0 : 1 - intensity * intensity;
-                data[i][j] += (float) intensity;
+    static void fillData(float[][] data, int x, int y, int mult) {
+        int minX = Math.max(x - radius, 0);
+        int maxX = Math.min(x + radius, data.length - 1);
+        int minY = Math.max(y - radius, 0);
+        int maxY = Math.min(y + radius, data[0].length - 1);
+
+        for (int i = minX; i <= maxX; i++) {
+            for (int j = minY; j <= maxY; j++) {
+                int dx = x - i;
+                int dy = y - j;
+                double intensity = dx * dx + dy * dy;
+                intensity = intensity >= r ? 0 : 1 - intensity / r;
+                data[i][j] += (float) intensity * mult;
             }
         }
     }

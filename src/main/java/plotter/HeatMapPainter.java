@@ -4,12 +4,12 @@ import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.painter.AbstractPainter;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class HeatMapPainter extends AbstractPainter<JXMapViewer> {
     private List<GeoPos> points;
+    private PoiStorage storage;
 
     public HeatMapPainter(List<GeoPos> points) {
         this.points = points;
@@ -17,6 +17,11 @@ public class HeatMapPainter extends AbstractPainter<JXMapViewer> {
 
     @Override
     protected void doPaint(Graphics2D g, JXMapViewer map, int width, int height) {
+        if (storage == null) {
+            storage = new PoiStorage(points, map.getTileFactory());
+            points = null;
+        }
+
         Rectangle rect = map.getViewportBounds();
 
         double down = rect.x;
@@ -26,15 +31,10 @@ public class HeatMapPainter extends AbstractPainter<JXMapViewer> {
 
         float[][] heatMask = new float[width][height];
 
-        for (GeoPos w : points) {
-            Point2D point = map.getTileFactory().geoToPixel(w, map.getZoom());
-
-            double lat = point.getX();
-            double lon = point.getY();
-
-            if (lat < up && lat > down && lon < right && lon > left)
-                Utils.fillData(heatMask, (int) (lat - down), (int) (lon - left), 20);
-        }
+        storage.getByZoom(map.getZoom()).forEach((w, c) -> {
+            if (w.lat < up && w.lat > down && w.lon < right && w.lon > left)
+                Utils.fillData(heatMask, (int) (w.lat - down), (int) (w.lon - left), c.get());
+        });
 
         BufferedImage bufferedImage = Utils.getImage(heatMask);
 

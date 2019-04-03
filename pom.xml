@@ -6,9 +6,9 @@
 
     <groupId>tx.vl</groupId>
     <artifactId>point-plotter</artifactId>
-    <version>1.0</version>
+    <version>1.0.0</version>
     <build>
-        <finalName>${artifactId}</finalName>
+        <finalName>${artifactId}-${version}</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
