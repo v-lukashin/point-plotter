@@ -1,4 +1,4 @@
-package plotter;
+package plotter.controller;
 
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
@@ -13,11 +13,13 @@ import org.jxmapviewer.painter.AbstractPainter;
 import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.TileFactoryInfo;
+import plotter.Utils;
+import plotter.model.GeoPos;
+import plotter.painter.PainterType;
 
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MapController {

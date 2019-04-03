@@ -1,4 +1,4 @@
-package plotter;
+package plotter.model;
 
 import java.awt.geom.Point2D;
 

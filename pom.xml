@@ -6,7 +6,7 @@
 
     <groupId>tx.vl</groupId>
     <artifactId>point-plotter</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <build>
         <finalName>${artifactId}-${version}</finalName>
         <plugins>

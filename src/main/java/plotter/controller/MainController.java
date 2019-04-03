@@ -1,4 +1,4 @@
-package plotter;
+package plotter.controller;
 
 import javafx.collections.MapChangeListener;
 import javafx.embed.swing.SwingFXUtils;
@@ -16,6 +16,7 @@ import javafx.scene.input.DataFormat;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.jxmapviewer.painter.AbstractPainter;
+import plotter.Setup;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -49,7 +50,7 @@ public class MainController implements Initializable {
     @FXML
     public void addPoints() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("PointsAdd.fxml"));
+            FXMLLoader loader = new FXMLLoader(Setup.class.getResource("view/PointsAdd.fxml"));
             Stage stage = new Stage();
             stage.setScene(new Scene(loader.load()));
             stage.show();

@@ -1,4 +1,4 @@
-package plotter;
+package plotter.painter;
 
 public enum PainterType {
     POINTS("Points"), HEATMAP("HeatMap"), ROUTE("Route");

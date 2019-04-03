@@ -1,4 +1,4 @@
-package plotter;
+package plotter.model;
 
 import org.jxmapviewer.viewer.TileFactory;
 

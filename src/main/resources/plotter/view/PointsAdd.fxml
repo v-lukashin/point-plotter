@@ -6,10 +6,10 @@
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
-<?import plotter.PainterType?>
+<?import plotter.painter.PainterType?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="plotter.PointsAddController"
+      fx:controller="plotter.controller.PointsAddController"
       fx:id="box"
       spacing="5"
       prefHeight="125.0" prefWidth="150.0">

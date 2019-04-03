@@ -1,5 +1,7 @@
 package plotter;
 
+import plotter.controller.MapController;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -7,15 +9,15 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicReference;
 
-class Setup {
-    static final MapController mapController = new MapController();
-    static final AtomicReference<File> lastDir = new AtomicReference<>();
+public class Setup {
+    public static final MapController mapController = new MapController();
+    public static final AtomicReference<File> lastDir = new AtomicReference<>();
 
     static {
         load();
     }
 
-    static void store() {
+    public static void store() {
         File dir = Setup.lastDir.get();
         if (dir != null) {
             Properties properties = new Properties();

@@ -1,4 +1,4 @@
-package plotter;
+package plotter.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,6 +9,8 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import plotter.Setup;
+import plotter.painter.PainterType;
 
 import java.awt.*;
 import java.io.File;

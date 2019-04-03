@@ -1,7 +1,10 @@
-package plotter;
+package plotter.painter;
 
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.painter.AbstractPainter;
+import plotter.Utils;
+import plotter.model.GeoPos;
+import plotter.model.PoiStorage;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

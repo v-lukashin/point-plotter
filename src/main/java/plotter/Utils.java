@@ -8,6 +8,11 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import org.jxmapviewer.painter.AbstractPainter;
+import plotter.model.GeoPos;
+import plotter.painter.HeatMapPainter;
+import plotter.painter.PainterType;
+import plotter.painter.PointsPainter;
+import plotter.painter.RoutePainter;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -23,7 +28,7 @@ public class Utils {
     private static final int radius = 20;
     private static final double r = radius * radius;
 
-    static List<GeoPos> loadCsv(File file) {
+    public static List<GeoPos> loadCsv(File file) {
         List<GeoPos> positions = new ArrayList<>();
         try {
             Scanner scanner = new Scanner(file);
@@ -37,7 +42,7 @@ public class Utils {
         return positions;
     }
 
-    static List<GeoPos> loadGeohash(File file) {
+    public static List<GeoPos> loadGeohash(File file) {
         List<GeoPos> positions = new ArrayList<>();
         try {
             Scanner scanner = new Scanner(file);
@@ -51,7 +56,7 @@ public class Utils {
         return positions;
     }
 
-    static AbstractPainter getPainter(List<GeoPos> points, java.awt.Color color, PainterType type) {
+    public static AbstractPainter getPainter(List<GeoPos> points, java.awt.Color color, PainterType type) {
         AbstractPainter painter;
 
         switch (type) {
@@ -69,7 +74,7 @@ public class Utils {
         return painter;
     }
 
-    static void fillData(float[][] data, int x, int y, int mult) {
+    public static void fillData(float[][] data, int x, int y, int mult) {
         int minX = Math.max(x - radius, 0);
         int maxX = Math.min(x + radius, data.length - 1);
         int minY = Math.max(y - radius, 0);
@@ -86,7 +91,7 @@ public class Utils {
         }
     }
 
-    static void setData(WritableImage image, float[][] data) {
+    private static void setData(WritableImage image, float[][] data) {
         PixelWriter writer = image.getPixelWriter();
         int lengthX = data.length;
         int lengthY = data[0].length;
@@ -101,7 +106,7 @@ public class Utils {
             }
     }
 
-    static BufferedImage getImage(float[][] data) {
+    public static BufferedImage getImage(float[][] data) {
         WritableImage writableImage = new WritableImage(data.length, data[0].length);
         Utils.setData(writableImage, data);
 
@@ -111,7 +116,7 @@ public class Utils {
         return bufferedImage;
     }
 
-    static Color[] getGradient(Color[] base, int intervalStep) {
+    private static Color[] getGradient(Color[] base, int intervalStep) {
         List<Color> tmp = new ArrayList<>();
         for (int i = 0; i < base.length - 1; i++) {
             Color start = base[i];
