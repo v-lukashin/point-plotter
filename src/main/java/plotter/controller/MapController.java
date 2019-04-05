@@ -78,6 +78,14 @@ public class MapController {
         }
     }
 
+    public void zoomIn(){
+        mapViewer.setZoom(mapViewer.getZoom() - 1);
+    }
+
+    public void zoomOut(){
+        mapViewer.setZoom(mapViewer.getZoom() + 1);
+    }
+
     private GeoPos computeGeoCenter(final List<GeoPos> positions) {
         double sumLat = 0;
         double sumLon = 0;

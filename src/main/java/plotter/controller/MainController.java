@@ -25,6 +25,7 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class MainController implements Initializable {
     @FXML
@@ -94,5 +95,13 @@ public class MainController implements Initializable {
             } catch (IOException ignored) {
             }
         }
+    }
+    @FXML
+    public void zoomIn(){
+        Setup.mapController.zoomIn();
+    }
+    @FXML
+    public void zoomOut(){
+        Setup.mapController.zoomOut();
     }
 }
