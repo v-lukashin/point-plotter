@@ -7,12 +7,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
+import javafx.scene.input.KeyCode;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.jxmapviewer.painter.AbstractPainter;
@@ -25,7 +27,6 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 public class MainController implements Initializable {
     @FXML
@@ -36,6 +37,28 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         node.setContent(Setup.mapController.getMapViewer());
+        node.setOnKeyPressed(ev -> {
+            KeyCode code = ev.getCode();
+            switch (code) {
+                case UP:
+                case DOWN:
+                case LEFT:
+                case RIGHT:
+                    Setup.mapController.move(code);
+                    break;
+                case MINUS:
+                case SUBTRACT:
+                case PAGE_DOWN:
+                    Setup.mapController.zoomOut();
+                    break;
+                case PLUS:
+                case ADD:
+                case EQUALS:
+                case PAGE_UP:
+                    Setup.mapController.zoomIn();
+                    break;
+            }
+        });
         Setup.mapController.getPointsMap().addListener((MapChangeListener<String, AbstractPainter>) change -> {
             if (change.wasAdded()) {
                 MenuItem item = new MenuItem(change.getKey());
@@ -96,12 +119,19 @@ public class MainController implements Initializable {
             }
         }
     }
+
     @FXML
-    public void zoomIn(){
+    public void move(ActionEvent event) {
+        Setup.mapController.move(((KeyCode) ((Node) event.getSource()).getUserData()));
+    }
+
+    @FXML
+    public void zoomIn() {
         Setup.mapController.zoomIn();
     }
+
     @FXML
-    public void zoomOut(){
+    public void zoomOut() {
         Setup.mapController.zoomOut();
     }
 }

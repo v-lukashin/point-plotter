@@ -2,6 +2,7 @@
 
 <?import javafx.embed.swing.SwingNode?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.input.KeyCode?>
 <?import javafx.scene.layout.*?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -24,6 +25,28 @@
                 <Menu text="Help" visible="false"/>
             </MenuBar>
             <Pane HBox.hgrow="ALWAYS" visible="false"/>
+            <HBox>
+                <Button text="↑" onAction="#move" styleClass="menu">
+                    <userData>
+                        <KeyCode fx:constant="UP"/>
+                    </userData>
+                </Button>
+                <Button text="↓" onAction="#move" styleClass="menu">
+                    <userData>
+                        <KeyCode fx:constant="DOWN"/>
+                    </userData>
+                </Button>
+                <Button text="←" onAction="#move" styleClass="menu">
+                    <userData>
+                        <KeyCode fx:constant="LEFT"/>
+                    </userData>
+                </Button>
+                <Button text="→" onAction="#move" styleClass="menu">
+                    <userData>
+                        <KeyCode fx:constant="RIGHT"/>
+                    </userData>
+                </Button>
+            </HBox>
             <HBox>
                 <Button text="Z+" onAction="#zoomIn" styleClass="menu"/>
                 <Button text="Z-" onAction="#zoomOut" styleClass="menu"/>

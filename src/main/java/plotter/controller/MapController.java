@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
+import javafx.scene.input.KeyCode;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.cache.FileBasedLocalCache;
@@ -19,6 +20,7 @@ import plotter.painter.PainterType;
 
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.List;
 
@@ -78,12 +80,40 @@ public class MapController {
         }
     }
 
-    public void zoomIn(){
+    public void zoomIn() {
         mapViewer.setZoom(mapViewer.getZoom() - 1);
     }
 
-    public void zoomOut(){
+    public void zoomOut() {
         mapViewer.setZoom(mapViewer.getZoom() + 1);
+    }
+
+    public void move(KeyCode code) {
+        Point2D center = mapViewer.getCenter();
+        int width = mapViewer.getWidth();
+        int height = mapViewer.getHeight();
+        double x = center.getX();
+        double y = center.getY();
+
+        switch (code) {
+            case UP:
+                y -= height / 8;
+                break;
+
+            case DOWN:
+                y += height / 8;
+                break;
+
+            case LEFT:
+                x -= width / 8;
+                break;
+
+            case RIGHT:
+                x += width / 8;
+                break;
+        }
+
+        mapViewer.setCenter(new Point2D.Double(x, y));
     }
 
     private GeoPos computeGeoCenter(final List<GeoPos> positions) {
