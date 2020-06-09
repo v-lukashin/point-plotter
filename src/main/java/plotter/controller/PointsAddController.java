@@ -52,7 +52,7 @@ public class PointsAddController implements Initializable {
     private void buttonSetFileAction(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(Setup.lastDir.get());
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Points in CSV or Geohash format", "*.csv", "*.txt");
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Points in CSV", "*.csv", "*.txt");
         fileChooser.getExtensionFilters().add(filter);
         File file = fileChooser.showOpenDialog(box.getScene().getWindow());
         if (file != null) {

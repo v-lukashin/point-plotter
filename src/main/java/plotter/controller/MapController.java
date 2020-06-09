@@ -13,9 +13,11 @@ import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 import org.jxmapviewer.painter.AbstractPainter;
 import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
+import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
 import plotter.Utils;
-import plotter.model.GeoPos;
+import plotter.model.Geometry;
+import plotter.model.Point;
 import plotter.painter.PainterType;
 
 import javax.swing.event.MouseInputListener;
@@ -116,21 +118,22 @@ public class MapController {
         mapViewer.setCenter(new Point2D.Double(x, y));
     }
 
-    private GeoPos computeGeoCenter(final List<GeoPos> positions) {
+    private GeoPosition computeGeoCenter(final List<Geometry> positions) {
         double sumLat = 0;
         double sumLon = 0;
 
-        for (GeoPos pos : positions) {
-            sumLat += pos.getLatitude();
-            sumLon += pos.getLongitude();
+        for (Geometry geometry : positions) {
+            Point pos = geometry.getCenter();
+            sumLat += pos.lat;
+            sumLon += pos.lon;
         }
         double avgLat = sumLat / positions.size();
         double avgLon = sumLon / positions.size();
-        return new GeoPos(avgLat, avgLon);
+        return new GeoPosition(avgLat, avgLon);
     }
 
     public void addPoints(File file, Color color, PainterType type) {
-        List<GeoPos> points = (file.getName().endsWith(".csv")) ? Utils.loadCsv(file) : Utils.loadGeohash(file);
+        List<Geometry> points = Utils.loadCsv(file);
 
         mapViewer.setCenterPosition(computeGeoCenter(points));
         mapViewer.setZoom(8);

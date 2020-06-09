@@ -2,20 +2,23 @@ package plotter.painter;
 
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.painter.AbstractPainter;
-import plotter.model.GeoPos;
+import org.jxmapviewer.viewer.GeoPosition;
+import plotter.Utils;
+import plotter.model.Geometry;
 import plotter.model.PoiStorage;
 
 import java.awt.*;
 import java.util.List;
 
 public class PointsPainter extends AbstractPainter<JXMapViewer> {
-    private List<GeoPos> points;
+    private List<GeoPosition> points;
     private Color color;
     private PoiStorage storage;
 
-    public PointsPainter(List<GeoPos> points, Color color) {
-        this.points = points;
+    public PointsPainter(List<Geometry> geometries, Color color) {
         this.color = color;
+
+        this.points = Utils.convertToGeoPositions(geometries);
     }
 
     @Override

@@ -8,11 +8,11 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import org.jxmapviewer.painter.AbstractPainter;
-import plotter.model.GeoPos;
-import plotter.painter.HeatMapPainter;
-import plotter.painter.PainterType;
-import plotter.painter.PointsPainter;
-import plotter.painter.RoutePainter;
+import org.jxmapviewer.viewer.GeoPosition;
+import plotter.model.Geometry;
+import plotter.model.Point;
+import plotter.model.Route;
+import plotter.painter.*;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -28,47 +28,56 @@ public class Utils {
     private static final int radius = 20;
     private static final double r = radius * radius;
 
-    public static List<GeoPos> loadCsv(File file) {
-        List<GeoPos> positions = new ArrayList<>();
+    public static List<Geometry> loadCsv(File file) {
+        List<Geometry> geometries = new ArrayList<>();
         try {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String[] line = CSV_PARSER.parseLine(scanner.nextLine());
-                if (line.length > 1)
-                    positions.add(new GeoPos(Double.parseDouble(line[0]), Double.parseDouble(line[1])));
+                if (line.length == 2)
+                    geometries.add(new Point(Double.parseDouble(line[0]), Double.parseDouble(line[1])));
+                else if (line.length > 2) {
+                    ArrayList<Point> points = new ArrayList<>();
+                    for (int i = 0; i < line.length / 2; i++)
+                        points.add(new Point(Double.parseDouble(line[i * 2]), Double.parseDouble(line[i * 2 + 1])));
+                    geometries.add(new Route(points));
+                }
             }
         } catch (IOException e) {
         }
-        return positions;
+        return geometries;
     }
 
-    public static List<GeoPos> loadGeohash(File file) {
-        List<GeoPos> positions = new ArrayList<>();
+    public static List<Point> loadGeohash(File file) {
+        List<Point> positions = new ArrayList<>();
         try {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 GeoHash geoHash = GeoHash.fromGeohashString(scanner.nextLine().split(":")[0]);
                 WGS84Point point = geoHash.getPoint();
-                positions.add(new GeoPos(point.getLatitude(), point.getLongitude()));
+                positions.add(new Point(point.getLatitude(), point.getLongitude()));
             }
         } catch (IOException e) {
         }
         return positions;
     }
 
-    public static AbstractPainter getPainter(List<GeoPos> points, java.awt.Color color, PainterType type) {
+    public static AbstractPainter getPainter(List<Geometry> geometries, java.awt.Color color, PainterType type) {
         AbstractPainter painter;
 
         switch (type) {
             case POINTS:
-                painter = new PointsPainter(points, color);
+                painter = new PointsPainter(geometries, color);
                 break;
             case HEATMAP:
-                painter = new HeatMapPainter(points);
+                painter = new HeatMapPainter(geometries);
+                break;
+            case HYBRID:
+                painter = new HybridPainter(geometries, color);
                 break;
             case ROUTE:
             default:
-                painter = new RoutePainter(points, color);
+                painter = new RoutePainter(geometries, color);
         }
 
         return painter;
@@ -134,5 +143,19 @@ public class Utils {
         }
 
         return colors;
+    }
+
+    public static List<GeoPosition> convertToGeoPositions(List<? extends Geometry> geometries) {
+        ArrayList<GeoPosition> points = new ArrayList<>();
+        for (Geometry geometry : geometries) {
+            if (geometry instanceof plotter.model.Point) {
+                Point point = (Point) geometry;
+                points.add(new GeoPosition(point.lat, point.lon));
+            } else if (geometry instanceof Route) {
+                List<Point> route = ((Route) geometry).points;
+                for (Point point : route) points.add(new GeoPosition(point.lat, point.lon));
+            }
+        }
+        return points;
     }
 }

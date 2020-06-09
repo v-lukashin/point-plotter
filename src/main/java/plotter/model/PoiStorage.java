@@ -1,5 +1,6 @@
 package plotter.model;
 
+import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactory;
 
 import java.util.HashMap;
@@ -10,9 +11,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PoiStorage {
     private Map<Poi, AtomicInteger>[] byZoom;
 
-    public PoiStorage(List<GeoPos> points, TileFactory factory) {
+    public PoiStorage(List<GeoPosition> points, TileFactory factory) {
         Map<Poi, AtomicInteger> pois = new HashMap<>(points.size());
-        for (GeoPos point : points) {
+        for (GeoPosition point : points) {
             Poi poi = new Poi(factory.geoToPixel(point, 0));
             AtomicInteger counter = pois.get(poi);
             if (counter == null) pois.put(poi, counter = new AtomicInteger(0));

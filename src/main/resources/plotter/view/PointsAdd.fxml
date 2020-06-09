@@ -20,8 +20,9 @@
         <items>
             <FXCollections fx:factory="observableArrayList">
                 <PainterType fx:value="POINTS"/>
-                <PainterType fx:value="HEATMAP"/>
                 <PainterType fx:value="ROUTE"/>
+                <PainterType fx:value="HYBRID"/>
+                <PainterType fx:value="HEATMAP"/>
             </FXCollections>
         </items>
     </ChoiceBox>

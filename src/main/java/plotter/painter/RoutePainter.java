@@ -3,22 +3,24 @@ package plotter.painter;
 
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.painter.AbstractPainter;
-import plotter.model.GeoPos;
+import org.jxmapviewer.viewer.GeoPosition;
+import plotter.Utils;
+import plotter.model.Geometry;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class RoutePainter extends AbstractPainter<JXMapViewer> {
     private Color color;
 
-    private List<GeoPos> points;
+    private List<GeoPosition> points;
 
-    public RoutePainter(List<GeoPos> points, Color color) {
-        this.points = new ArrayList<>(points);
+    public RoutePainter(List<? extends Geometry> geometries, Color color) {
         this.color = color;
+
+        this.points = Utils.convertToGeoPositions(geometries);
     }
 
     @Override
@@ -38,7 +40,7 @@ public class RoutePainter extends AbstractPainter<JXMapViewer> {
     }
 
     private void drawRoute(Graphics2D g, JXMapViewer map) {
-        Iterator<GeoPos> it = points.iterator();
+        Iterator<GeoPosition> it = points.iterator();
         if (!it.hasNext()) return;
         Point2D last = map.getTileFactory().geoToPixel(it.next(), map.getZoom());
 

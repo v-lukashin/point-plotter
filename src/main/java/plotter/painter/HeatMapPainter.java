@@ -2,8 +2,9 @@ package plotter.painter;
 
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.painter.AbstractPainter;
+import org.jxmapviewer.viewer.GeoPosition;
 import plotter.Utils;
-import plotter.model.GeoPos;
+import plotter.model.Geometry;
 import plotter.model.PoiStorage;
 
 import java.awt.*;
@@ -11,11 +12,11 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class HeatMapPainter extends AbstractPainter<JXMapViewer> {
-    private List<GeoPos> points;
+    private List<GeoPosition> points;
     private PoiStorage storage;
 
-    public HeatMapPainter(List<GeoPos> points) {
-        this.points = points;
+    public HeatMapPainter(List<Geometry> geometries) {
+        this.points = Utils.convertToGeoPositions(geometries);
     }
 
     @Override
